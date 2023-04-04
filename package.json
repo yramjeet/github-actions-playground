@@ -1,0 +1,8 @@
+{
+  "name": "github-actions-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:yramjeet/github-actions-playground.git",
+  "author": "yramjeet <ramjeet.yadav@peak.ai>",
+  "license": "MIT"
+}
