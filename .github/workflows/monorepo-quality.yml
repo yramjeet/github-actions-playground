@@ -39,21 +39,16 @@ jobs:
           fi
 
           if [[ $(git diff $base $head package.json) ]]; then
-            echo "changed_apps=\"$(echo "[$(ls apps | tr '\n' ',' | sed 's/,$//')]")\"" >> $GITHUB_OUTPUT
+            echo "changed_apps=$(echo "[$(ls apps | tr '\n' ' ' | sed 's/\s*$//')]")" >> $GITHUB_OUTPUT
           else
-            echo "changed_apps=\"$(echo "[$(git diff --name-only --relative=apps/ $base $head | awk -F'/' '{print $1}' | sort -u | tr '\n' ',' | sed 's/,$//')]")\"" >> $GITHUB_OUTPUT
+            echo "changed_apps=$(echo "[$(git diff --name-only --relative=apps/ $base $head | awk -F'/' '{print $1}' | sort -u | tr '\n' ' ' | sed 's/\s*$//')]")" >> $GITHUB_OUTPUT
           fi
 
       - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
       - run: |
-          apps_string=${{ steps.changed-files.outputs.changed_apps }}
-          json_string=$(echo "\"$apps_string\"")
-          abc="${{ steps.changed-files.outputs.changed_apps }}"
-          echo $abc
-          changed_apps=${{ fromJSON(steps.changed-files.outputs.changed_apps) }}
+          changed_apps=${{ steps.changed-files.outputs.changed_apps }}
           echo $changed_apps
-          echo ${changed_apps[@]}
-          for app in "${changed_apps[@]}"; do
+          for app in $changed_apps; do
             echo $app
           done
           
