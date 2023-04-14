@@ -10,8 +10,13 @@ function adderTwo(num){
     return num + 2;
 }
 
+function adderThree(num){
+    return num + 3;
+}
+
 module.exports = {
     add,
     adderFive,
+    adderThree,
     adderTwo
 }

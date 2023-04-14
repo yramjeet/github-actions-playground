@@ -10,8 +10,13 @@ function subTwo(num){
     return num - 2;
 }
 
+function subThree(num){
+    return num - 3;
+}
+
 module.exports = {
     sub,
     subFive,
+    subThree,
     subTwo
 }
