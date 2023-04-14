@@ -50,14 +50,8 @@ jobs:
               fi
             done
             echo "here 1 ${changed_apps[@]}"
+            echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
           }
-          echo "here2 ${changed_apps[@]}"
-
-          changed_apps=$(ls)
-
-          echo "here3 ${changed_apps[@]}"
-
-          echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
-
+          
       - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
       - run: echo "🍏 This job's status is ${{ job.status }}."
