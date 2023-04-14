@@ -49,11 +49,14 @@ jobs:
                 changed_apps+=($(echo $filename | cut -d/ -f2))
               fi
             done
-            echo ${changed_apps[@]}
+            echo "here 1 ${changed_apps[@]}"
           }
-          echo ${changed_apps[@]}
+          echo "here2 ${changed_apps[@]}"
 
-          echo ${changed_apps[@]}
+          changed_apps=$(ls)
+
+          echo "here3 ${changed_apps[@]}"
+
           echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
 
       - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
