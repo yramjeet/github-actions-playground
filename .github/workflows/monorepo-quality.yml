@@ -40,8 +40,8 @@ jobs:
 
           git diff --name-only $base $head
 
+          changed_apps=()
           git diff --name-only $base $head | {
-            changed_apps=()
             while read filename; do
               echo $filename
               if [[ $filename = "apps/"* ]]; then
@@ -49,7 +49,9 @@ jobs:
                 changed_apps+=($(echo $filename | cut -d/ -f2))
               fi
             done
+            echo ${changed_apps[@]}
           }
+          echo ${changed_apps[@]}
 
           echo ${changed_apps[@]}
           echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
