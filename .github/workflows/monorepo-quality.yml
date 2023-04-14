@@ -48,7 +48,7 @@ jobs:
       - run: |
           apps_string=${{ steps.changed-files.outputs.changed_apps }}
           json_string=$(echo "\"$apps_string\"")
-          changed_apps=${{ fromJSON(json_string) }}
+          changed_apps=${{ fromJSON($json_string) }}
           abc="${{ steps.changed-files.outputs.changed_apps }}"
           echo $abc
           echo $changed_apps
