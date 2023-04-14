@@ -53,5 +53,5 @@ jobs:
             echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
           }
           
-      - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
+      - run: echo "${{ fromJSON(steps.changed-files.outputs.changed_apps) }}"
       - run: echo "🍏 This job's status is ${{ job.status }}."
