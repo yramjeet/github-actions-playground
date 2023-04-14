@@ -22,21 +22,21 @@ jobs:
           pwd
           ls
           echo "${{ github.event_name }}"
-          echo "${{ github }}"
-          echo "${{ github.pull_request }}"
-          echo "${{ github.pull_request.base }}"
-          echo "${{ github.pull_request.base.sha }}"
-          echo "${{ github.pull_request.head }}"
-          echo "${{ github.pull_request.head.sha }}"
+          echo "${{ toJSON(github.event) }}"
+          echo "${{ github.event.pull_request }}"
+          echo "${{ github.event.pull_request.base }}"
+          echo "${{ github.event.pull_request.base.sha }}"
+          echo "${{ github.event.pull_request.head }}"
+          echo "${{ github.event.pull_request.head.sha }}"
       
       - name: Get list of changed files
         id: changed-files
         run: |
-          git diff --name-only ${{ github.pull_request.base.sha }} ${{ github.pull_request.head.sha }}
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
-            echo "changed_files=$(git diff --name-only ${{ github.pull_request.base.sha }} ${{ github.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+            echo "changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
           else
-            echo "changed_file=$(git diff --name-only ${{ github.before }} ${{ github.after }})" >> $GITHUB_OUTPUT
+            echo "changed_file=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})" >> $GITHUB_OUTPUT
           fi
 
       - run: echo "${{ steps.changed-files.outputs.changed_files }}"
