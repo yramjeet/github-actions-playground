@@ -1,0 +1,56 @@
+name: Monorepo Qaulity
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: List files in the repository
+        run: |
+          pwd
+          ls
+          echo "${{ github.event_name }}"
+          echo "${{ github.event.pull_request.base.sha }}"
+          echo "${{ github.event.pull_request.head.sha }}"
+      
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          if [[ ${{ github.event_name }} == "pull_request" ]]; then
+            base=${{ github.event.pull_request.base.sha }}
+            head=${{ github.event.pull_request.head.sha }}
+          else
+            base=${{ github.event.before }}
+            head=${{ github.event.after }}
+          fi
+
+          if [[ $(git diff $base $head package.json) ]]; then
+            echo "changed_apps=$(echo "$(ls apps | tr '\n' ' ' | sed 's/\s*$//')")" >> $GITHUB_OUTPUT
+          else
+            echo "changed_apps=$(echo "$(git diff --name-only --relative=apps/ $base $head | awk -F'/' '{print $1}' | sort -u | tr '\n' ' ' | sed 's/\s*$//')")" >> $GITHUB_OUTPUT
+          fi
+
+      - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
+      - run: |
+          changed_apps="${{ steps.changed-files.outputs.changed_apps }}"
+          echo $changed_apps
+          for app in $changed_apps; do
+            echo $app
+          done
+          
+      
+      - run: echo "🍏 This job's status is ${{ job.status }}."
