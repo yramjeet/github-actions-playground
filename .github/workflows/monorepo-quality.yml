@@ -38,12 +38,16 @@ jobs:
             head=${{ github.event.after }}
           fi
 
+          git diff --name-only $base $head
+
           git diff --name-only $base $head | {
             changed_apps=()
             while read filename; do
-                if [[ $filename = "apps/"* ]]; then
-                    changed_apps+=($(echo $filename | cut -d/ -f2))
-                fi
+              echo $filename
+              if [[ $filename = "apps/"* ]]; then
+                echo $filename | cut -d/ -f2
+                changed_apps+=($(echo $filename | cut -d/ -f2))
+              fi
             done
           }
 
