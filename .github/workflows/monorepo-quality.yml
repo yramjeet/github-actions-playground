@@ -47,11 +47,15 @@ jobs:
       - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
       - run: |
           apps_string=${{ steps.changed-files.outputs.changed_apps }}
-          echo $app_string
-          changed_apps=${{ fromJSON(echo "\"${apps_string}\"") }}
+          json_string=$(echo "\"$apps_string\"")
+          changed_apps=${{ fromJSON(json_string) }}
+          abc="${{ steps.changed-files.outputs.changed_apps }}"
+          echo $abc
+          echo $changed_apps
           echo ${changed_apps[@]}
           for app in "${changed_apps[@]}"; do
             echo $app
           done
+          
       
       - run: echo "🍏 This job's status is ${{ job.status }}."
