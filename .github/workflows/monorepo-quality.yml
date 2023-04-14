@@ -38,20 +38,12 @@ jobs:
             head=${{ github.event.after }}
           fi
 
-          git diff --name-only $base $head
-
-          changed_apps=()
-          git diff --name-only $base $head | {
-            while read filename; do
-              echo $filename
-              if [[ $filename = "apps/"* ]]; then
-                echo $filename | cut -d/ -f2
-                changed_apps+=($(echo $filename | cut -d/ -f2))
-              fi
-            done
-            echo "here 1 ${changed_apps[@]}"
-            echo "changed_apps=$changed_apps" >> $GITHUB_OUTPUT
-          }
+          if [[ $(git diff $base $head package.json) ]]; then
+            echo "changed_apps=$(echo "[$(ls | tr '\n' ',' | sed 's/,$//')]")" >> $GITHUB_OUTPUT
+          else
+            echo "changed_apps=$(echo "[$(git diff --name-only --relative=apps/ $base $head | awk -F'/' '{print $1}' | sort -u | tr '\n' ',' | sed 's/,$//')]")" >> $GITHUB_OUTPUT
+          fi
           
+      - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
       - run: echo "${{ fromJSON(steps.changed-files.outputs.changed_apps) }}"
       - run: echo "🍏 This job's status is ${{ job.status }}."
