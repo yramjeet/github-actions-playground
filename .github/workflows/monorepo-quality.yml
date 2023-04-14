@@ -46,7 +46,7 @@ jobs:
 
       - run: echo "${{ steps.changed-files.outputs.changed_apps }}"
       - run: |
-          changed_apps=${{ steps.changed-files.outputs.changed_apps }}
+          changed_apps="${{ steps.changed-files.outputs.changed_apps }}"
           echo $changed_apps
           for app in $changed_apps; do
             echo $app
